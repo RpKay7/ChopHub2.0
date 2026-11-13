@@ -86,7 +86,7 @@ export async function register(req, res) {
     const supabaseAuth = createAuthClient();
 
     const { data, error } = await supabaseAuth.auth.signUp({
-      email: email.trim(),
+      email: email.trim().toLowerCase(),
       password,
       options: {
         data: {
@@ -103,39 +103,23 @@ export async function register(req, res) {
       });
     }
 
-    let sessionRecord = null;
-
-    // Register a session if Supabase immediately authenticates
-    // the customer after registration.
-    if (data.session?.access_token && data.user?.id) {
-      try {
-        sessionRecord = await createCustomerSession(
-          req,
-          data.user.id,
-          data.session.access_token
-        );
-      } catch (sessionError) {
-        console.error(
-          "Registration session creation failed:",
-          sessionError
-        );
-
-        return res.status(500).json({
-          success: false,
-          message:
-            "Your account was created, but we couldn't register your session. Please try logging in.",
-        });
-      }
+    // Email confirmation must be enabled in Supabase.
+    // A customer must verify their email before receiving a session.
+    if (data.session) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Email verification is not enabled. Please contact support.",
+      });
     }
 
     return res.status(201).json({
       success: true,
-      message: data.session
-        ? "Registration successful!"
-        : "Registration successful. Please check your email to verify your account.",
+      requiresEmailConfirmation: true,
+      message:
+        "Registration successful. Please check your email for your eight-digit verification code.",
+      email: email.trim().toLowerCase(),
       user: data.user,
-      session: data.session,
-      sessionRecord,
     });
   } catch (error) {
     console.error("Registration error:", error);
@@ -143,6 +127,108 @@ export async function register(req, res) {
     return res.status(500).json({
       success: false,
       message: "An error occurred during registration.",
+    });
+  }
+}
+
+// VERIFY CUSTOMER EMAIL
+export async function verifyEmail(req, res) {
+  try {
+    const { email, token } = req.body;
+
+    if (!email || !token) {
+      return res.status(400).json({
+        success: false,
+        message: "Email address and verification code are required.",
+      });
+    }
+
+    const verificationToken = String(token).trim();
+
+    // Supabase signup verification uses an eight-digit code.
+    if (!/^\d{8}$/.test(verificationToken)) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid eight-digit verification code.",
+      });
+    }
+
+    const supabaseAuth = createAuthClient();
+
+    const { data, error } = await supabaseAuth.auth.verifyOtp({
+      email: email.trim().toLowerCase(),
+      token: verificationToken,
+      type: "signup",
+    });
+
+    if (error || !data.user || !data.session) {
+      return res.status(400).json({
+        success: false,
+        message:
+          error?.message || "Email verification failed. Please try again.",
+      });
+    }
+
+    // Create the ChopHub customer session only after verification.
+    const sessionRecord = await createCustomerSession(
+      req,
+      data.user.id,
+      data.session.access_token
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Your email has been verified successfully!",
+      user: data.user,
+      session: data.session,
+      sessionRecord,
+    });
+  } catch (error) {
+    console.error("Email verification error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while verifying your email.",
+    });
+  }
+}
+
+// RESEND CUSTOMER EMAIL VERIFICATION CODE
+export async function resendVerificationCode(req, res) {
+  try {
+    const { email } = req.body;
+
+    if (!email || !email.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Email address is required.",
+      });
+    }
+
+    const supabaseAuth = createAuthClient();
+
+    const { error } = await supabaseAuth.auth.resend({
+      type: "signup",
+      email: email.trim().toLowerCase(),
+    });
+
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "A new verification code has been sent to your email.",
+    });
+  } catch (error) {
+    console.error("Resend verification code error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to resend your verification code. Please try again.",
     });
   }
 }
@@ -236,8 +322,7 @@ export async function refreshCustomerSession(req, res) {
       });
     }
 
-    // Locate the existing registered ChopHub session using
-    // the hash of the customer's previous access token.
+    // Locate the existing registered ChopHub session.
     const oldTokenHash = hashAccessToken(access_token);
 
     const { data: existingSession, error: sessionError } =
