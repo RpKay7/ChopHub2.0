@@ -3,10 +3,10 @@
   "name": "chophub-server",
   "version": "1.0.0",
   "description": "ChopHub backend API",
-  "main": "src/server.js",
+  "main": "src/Server.js",
   "type": "module",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node src/Server.js",
     "dev": "node --watch src/server.js"
   },
   "dependencies": {
