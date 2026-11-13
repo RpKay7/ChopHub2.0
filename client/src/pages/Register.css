@@ -1,0 +1,205 @@
+
+@import "./Login.css";
+
+.register-layout {
+  width: min(1380px, 90%);
+  min-height: calc(100vh - 89px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  align-items: center;
+  gap: clamp(50px, 8vw, 120px);
+  padding: 45px 0 65px;
+}
+
+.register-visual {
+  min-width: 0;
+}
+
+.register-visual-image {
+  position: relative;
+  min-height: 720px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  border: 1px solid rgba(247, 240, 229, 0.1);
+  border-radius: 5px;
+  background-image: url("/images/menu/beef-suya.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.register-visual-image::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(
+    180deg,
+    rgba(15, 11, 13, 0.05) 5%,
+    rgba(15, 11, 13, 0.2) 35%,
+    rgba(15, 11, 13, 0.95) 100%
+  );
+}
+
+.register-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(24, 15, 19, 0.2),
+    transparent 65%
+  );
+}
+
+.register-visual-content {
+  position: relative;
+  z-index: 1;
+  max-width: 550px;
+  padding: clamp(30px, 5vw, 65px);
+}
+
+.register-visual-content h1 {
+  margin: 18px 0;
+  color: var(--color-cream);
+  font-family: var(--font-heading);
+  font-size: clamp(43px, 5vw, 69px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -2px;
+}
+
+.register-visual-content h1 span {
+  color: var(--color-gold);
+  font-style: italic;
+}
+
+.register-visual-content p {
+  max-width: 390px;
+  color: rgba(247, 240, 229, 0.78);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.register-form-side {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.register-form-container {
+  width: 100%;
+  max-width: 460px;
+}
+
+.register-form-container .auth-form-heading {
+  margin-bottom: 27px;
+}
+
+.register-form-container .auth-form-heading h2 {
+  font-size: clamp(32px, 3.2vw, 42px);
+}
+
+.register-form {
+  gap: 17px;
+}
+
+.register-form .auth-field {
+  gap: 8px;
+}
+
+.register-form .auth-field input {
+  min-height: 49px;
+}
+
+.register-field-hint {
+  color: rgba(189, 177, 174, 0.65);
+  font-size: 10px;
+}
+
+.register-terms {
+  align-items: flex-start;
+  line-height: 1.7;
+}
+
+.register-terms .auth-custom-checkbox {
+  margin-top: 2px;
+}
+
+.register-terms a {
+  color: var(--color-gold);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.register-terms a:hover {
+  color: var(--color-gold-light);
+  text-decoration: underline;
+}
+
+.register-form .auth-submit-button {
+  margin-top: 3px;
+}
+
+.register-form-container .auth-form-footer {
+  margin-top: 38px;
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+  .register-layout {
+    grid-template-columns: 0.9fr 1fr;
+    gap: 40px;
+  }
+
+  .register-visual-image {
+    min-height: 680px;
+  }
+
+  .register-visual-content {
+    padding: 35px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  .register-layout {
+    width: 90%;
+    min-height: auto;
+    display: block;
+    padding: 38px 0 55px;
+  }
+
+  .register-visual {
+    display: none;
+  }
+
+  .register-form-side {
+    width: 100%;
+  }
+
+  .register-form-container {
+    max-width: 480px;
+  }
+
+  .register-form-container .auth-form-heading {
+    margin-bottom: 27px;
+  }
+
+  .register-form {
+    gap: 18px;
+  }
+
+  .register-form-container .auth-form-footer {
+    margin-top: 45px;
+  }
+}
+
+@media (max-width: 420px) {
+  .register-form-container .auth-form-heading h2 {
+    font-size: 34px;
+  }
+
+  .register-terms {
+    font-size: 11px;
+  }
+}
