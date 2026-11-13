@@ -3,6 +3,8 @@ import express from "express";
 
 import {
   register,
+  verifyEmail,
+  resendVerificationCode,
   login,
   refreshCustomerSession,
   forgotPassword,
@@ -20,6 +22,8 @@ const router = express.Router();
 
 // Public authentication routes
 router.post("/register", register);
+router.post("/verify-email", verifyEmail);
+router.post("/resend-verification", resendVerificationCode);
 router.post("/login", login);
 router.post("/refresh", refreshCustomerSession);
 router.post("/forgot-password", forgotPassword);

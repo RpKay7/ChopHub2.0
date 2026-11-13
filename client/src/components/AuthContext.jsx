@@ -1,3 +1,4 @@
+
 import API_BASE_URL from "../config/api.js";
 
 import {
@@ -122,99 +123,99 @@ export function AuthProvider({ children }) {
 
   // Renew an existing Supabase session.
   const refreshAuthSession = useCallback(
-  async (sessionToRefresh = session) => {
-    // Reuse an ongoing refresh instead of refreshing twice.
-    if (refreshPromiseRef.current) {
-      return refreshPromiseRef.current;
-    }
+    async (sessionToRefresh = session) => {
+      if (refreshPromiseRef.current) {
+        return refreshPromiseRef.current;
+      }
 
-    if (
-      !sessionToRefresh?.refresh_token ||
-      !sessionToRefresh?.access_token
-    ) {
-      return {
-        success: false,
-        message: "Your login session is missing.",
-      };
-    }
-
-    const refreshPromise = (async () => {
-      try {
-        const response = await fetch(`${API_URL}/auth/refresh`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            access_token: sessionToRefresh.access_token,
-            refresh_token: sessionToRefresh.refresh_token,
-          }),
-        });
-
-        const result = await response.json();
-
-        if (
-          !response.ok ||
-          !result.success ||
-          !result.session?.access_token ||
-          !result.session?.refresh_token
-        ) {
-          throw new Error(
-            result.message || "Session renewal failed."
-          );
-        }
-
-        const rememberMe =
-          sessionToRefresh.rememberMe !== false;
-
-        const refreshedUser = {
-          ...(sessionToRefresh.user || user || {}),
-          ...(result.user || {}),
-        };
-
-        const sessionId =
-          result.sessionRecord?.session_id ||
-          sessionToRefresh.session_id ||
-          null;
-
-        const savedUser = saveSession(
-          {
-            ...result.session,
-            session_id: sessionId,
-          },
-          refreshedUser,
-          rememberMe
-        );
-
-        return {
-          success: true,
-          session: {
-            ...result.session,
-            session_id: sessionId,
-            user: savedUser,
-            rememberMe,
-          },
-        };
-      } catch (error) {
-        console.error("Session refresh failed:", error);
-
+      if (
+        !sessionToRefresh?.refresh_token ||
+        !sessionToRefresh?.access_token
+      ) {
         return {
           success: false,
-          message: error.message,
+          message: "Your login session is missing.",
         };
       }
-    })();
 
-    refreshPromiseRef.current = refreshPromise;
+      const refreshPromise = (async () => {
+        try {
+          const response = await fetch(`${API_URL}/auth/refresh`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              access_token: sessionToRefresh.access_token,
+              refresh_token: sessionToRefresh.refresh_token,
+            }),
+          });
 
-    try {
-      return await refreshPromise;
-    } finally {
-      refreshPromiseRef.current = null;
-    }
-  },
-  [session, user]
-);
+          const result = await response.json();
+
+          if (
+            !response.ok ||
+            !result.success ||
+            !result.session?.access_token ||
+            !result.session?.refresh_token
+          ) {
+            throw new Error(
+              result.message || "Session renewal failed."
+            );
+          }
+
+          const rememberMe =
+            sessionToRefresh.rememberMe !== false;
+
+          const refreshedUser = {
+            ...(sessionToRefresh.user || user || {}),
+            ...(result.user || {}),
+          };
+
+          const sessionId =
+            result.sessionRecord?.session_id ||
+            sessionToRefresh.session_id ||
+            null;
+
+          const savedUser = saveSession(
+            {
+              ...result.session,
+              session_id: sessionId,
+            },
+            refreshedUser,
+            rememberMe
+          );
+
+          return {
+            success: true,
+            session: {
+              ...result.session,
+              session_id: sessionId,
+              user: savedUser,
+              rememberMe,
+            },
+          };
+        } catch (error) {
+          console.error("Session refresh failed:", error);
+
+          return {
+            success: false,
+            message: error.message,
+          };
+        }
+      })();
+
+      refreshPromiseRef.current = refreshPromise;
+
+      try {
+        return await refreshPromise;
+      } finally {
+        refreshPromiseRef.current = null;
+      }
+    },
+    [session, user]
+  );
+
   // Verify and restore an existing login.
   useEffect(() => {
     let active = true;
@@ -245,7 +246,6 @@ export function AuthProvider({ children }) {
 
         let result = await response.json();
 
-        // If the access token expired, attempt to renew it.
         if (response.status === 401) {
           const refreshResult = await refreshAuthSession(
             storedSession
@@ -369,35 +369,159 @@ export function AuthProvider({ children }) {
         };
       }
 
-      if (result.session?.access_token) {
-        const sessionUser = saveSession(
-          {
-            ...result.session,
-            session_id:
-              result.sessionRecord?.session_id || null,
-          },
-          result.user,
-          true
-        );
+      // Do not create a login session before email verification.
+      return {
+        success: true,
+        user: formatUser(result.user),
+        email: result.email || accountDetails.email.trim().toLowerCase(),
+        requiresEmailConfirmation: true,
+        message:
+          result.message ||
+          "Please check your email for your verification code.",
+      };
+    } catch (error) {
+      console.error("Registration error:", error);
 
+      return {
+        success: false,
+        message: "Unable to connect to ChopHub. Please try again.",
+      };
+    }
+  };
+
+  // Verify a customer's six-digit email code.
+  const verifyEmail = async (email, token) => {
+    try {
+      const response = await fetch(`${API_URL}/auth/verify-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          token: String(token).trim(),
+        }),
+      });
+
+      const result = await response.json();
+
+      if (
+        !response.ok ||
+        !result.success ||
+        !result.session?.access_token
+      ) {
         return {
-          success: true,
-          user: sessionUser,
-          requiresEmailConfirmation: false,
-          message: result.message,
+          success: false,
+          message:
+            result.message || "Email verification failed.",
+        };
+      }
+
+      // Save the customer session only after successful verification.
+      const sessionUser = saveSession(
+        {
+          ...result.session,
+          session_id:
+            result.sessionRecord?.session_id || null,
+        },
+        result.user,
+        true
+      );
+
+      return {
+        success: true,
+        user: sessionUser,
+        message:
+          result.message || "Email verified successfully!",
+      };
+    } catch (error) {
+      console.error("Email verification error:", error);
+
+      return {
+        success: false,
+        message: "Unable to connect to ChopHub. Please try again.",
+      };
+    }
+  };
+
+  // Request a new six-digit email verification code.
+  const resendVerificationCode = async (email) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/auth/resend-verification`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.trim().toLowerCase(),
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        return {
+          success: false,
+          message:
+            result.message ||
+            "Unable to resend your verification code.",
         };
       }
 
       return {
         success: true,
-        user: formatUser(result.user),
-        requiresEmailConfirmation: true,
         message:
           result.message ||
-          "Please check your email to confirm your account.",
+          "A new verification code has been sent.",
       };
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error("Resend verification code error:", error);
+
+      return {
+        success: false,
+        message: "Unable to connect to ChopHub. Please try again.",
+      };
+    }
+  };
+
+  // Request a password recovery email.
+  const forgotPassword = async (email) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/auth/forgot-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.trim().toLowerCase(),
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        return {
+          success: false,
+          message:
+            result.message ||
+            "Unable to process your password recovery request.",
+        };
+      }
+
+      return {
+        success: true,
+        message:
+          result.message ||
+          "If an account exists, a password recovery email will be sent.",
+      };
+    } catch (error) {
+      console.error("Forgot password error:", error);
 
       return {
         success: false,
@@ -535,6 +659,9 @@ export function AuthProvider({ children }) {
     loading,
     isAuthenticated: Boolean(user),
     register,
+    verifyEmail,
+    resendVerificationCode,
+    forgotPassword,
     login,
     updateProfile,
     logout,

@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../components/AuthContext";
 import "./ForgotPassword.css";
 
 function ChopHubLogo() {
@@ -46,11 +47,14 @@ function ChopHubLogo() {
 }
 
 function ForgotPassword() {
+  const { forgotPassword } = useAuth();
+
   const [email, setEmail] = useState("");
   const [feedback, setFeedback] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     setFeedback("");
@@ -61,10 +65,19 @@ function ForgotPassword() {
       return;
     }
 
-    setSubmitted(true);
-    setFeedback(
-      "Your email address has been accepted. Password reset emails will be enabled when we connect authentication."
-    );
+    try {
+      setLoading(true);
+
+      const result = await forgotPassword(email);
+
+      setSubmitted(result.success);
+      setFeedback(result.message);
+    } catch (error) {
+      console.error("Password recovery request failed:", error);
+      setFeedback("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEmailChange = (event) => {
@@ -177,6 +190,7 @@ function ForgotPassword() {
                   value={email}
                   onChange={handleEmailChange}
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -192,9 +206,13 @@ function ForgotPassword() {
                 </div>
               )}
 
-              <button type="submit" className="auth-submit-button">
-                Send reset link
-                <span aria-hidden="true">→</span>
+              <button
+                type="submit"
+                className="auth-submit-button"
+                disabled={loading}
+              >
+                {loading ? "Sending..." : "Send reset link"}
+                {!loading && <span aria-hidden="true">→</span>}
               </button>
             </form>
 

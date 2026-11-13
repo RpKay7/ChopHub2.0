@@ -95,16 +95,13 @@ function Register() {
         return;
       }
 
-      if (result.requiresEmailConfirmation) {
-        setFeedback(
-          result.message ||
-          "Account created! Please check your email to confirm your account before signing in."
-        );
-
-        return;
-      }
-
-      navigate("/account", { replace: true });
+     navigate(
+  `/verify-email?email=${encodeURIComponent(
+    result.email || email.trim().toLowerCase()
+  )}`,
+  { replace: true }
+);
+return;
     } catch (error) {
       console.error("Registration submission error:", error);
 
