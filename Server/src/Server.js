@@ -36,9 +36,9 @@ const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://chophub20.vercel.app",
   "https://chophub20-oq4od913g-rpkays-projects.vercel.app",
 ];
-
 app.use(
   cors({
     origin: function (origin, callback) {
