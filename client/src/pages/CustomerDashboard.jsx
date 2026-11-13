@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api.js";
 
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -8,8 +9,7 @@ import { useNotifications } from "../components/NotificationContext";
 import MealDetailsModal from "../components/MealDetailsModal";
 import "./CustomerDashboard.css";
 
-const API_URL = "http://localhost:5000/api";
-
+const API_URL = API_BASE_URL;
 function formatNotificationDate(value) {
   const date = new Date(value);
 

@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api.js";
 
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -5,7 +6,7 @@ import { useCart } from "../components/CartContext";
 import { useAuth } from "../components/AuthContext";
 import "./Checkout.css";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = API_BASE_URL;
 const SETTINGS_KEY = "chophub-admin-settings";
 const REVIEW_STORAGE_KEY = "chophub-order-review";
 

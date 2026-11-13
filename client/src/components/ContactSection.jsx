@@ -1,10 +1,10 @@
+import API_BASE_URL from "../config/api.js";
 
 import { useState } from 'react';
 import { useAuth } from './AuthContext';
 import './ContactSection.css';
 
-const API_URL = 'http://localhost:5000/api/enquiries';
-
+const API_URL = `${API_BASE_URL}/enquiries`;
 const phoneNumber = '07068414697';
 const whatsappNumber = '2347068414697';
 

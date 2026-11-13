@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api.js";
 
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -769,7 +770,7 @@ function AdminDashboard() {
             : "week";
 
         const response = await fetch(
-          `http://localhost:5000/api/admin/overview?period=${periodValue}`,
+          `${API_BASE_URL}/admin/overview?period=${periodValue}`,
           {
             headers: {
               Authorization: `Bearer ${session.access_token}`,
@@ -812,7 +813,7 @@ function AdminDashboard() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/admin/orders",
+        `${API_BASE_URL}/admin/orders`,
         {
           headers: {
             Authorization: `Bearer ${session.access_token}`,
@@ -851,7 +852,7 @@ function AdminDashboard() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/orders/${orderId}/status`,
+        `${API_BASE_URL}/admin/orders/${orderId}/status`,
         {
           method: "PATCH",
           headers: {

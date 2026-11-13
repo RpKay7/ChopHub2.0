@@ -1,11 +1,11 @@
+import API_BASE_URL from "../config/api.js";
 
 import { useMemo, useState } from "react";
 import { menuCategories } from "../data/menu";
 import { useMenu } from "../components/MenuContext";
 import { useAuth } from "../components/AuthContext";
 
-const API_URL = "http://localhost:5000/api/menu";
-
+const API_URL = `${API_BASE_URL}/menu`;
 function formatPrice(amount) {
   return `₦${Number(amount).toLocaleString("en-NG")}`;
 }

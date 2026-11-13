@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api.js";
 
 import {
   createContext,
@@ -11,8 +12,7 @@ import { useAuth } from "./AuthContext";
 
 const NotificationContext = createContext(null);
 
-const API_URL = "http://localhost:5000/api";
-
+const API_URL = API_BASE_URL;
 export function NotificationProvider({ children }) {
   const { user, session, refreshAuthSession } = useAuth();
 

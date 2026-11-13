@@ -1,7 +1,8 @@
+import API_BASE_URL from "../config/api.js";
 import { useEffect, useMemo, useState } from "react";
 import "./AdminEnquiriesManagement.css";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = API_BASE_URL;
 const SESSION_KEY = "chophub-auth-session";
 
 const enquiryTypes = [

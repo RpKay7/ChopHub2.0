@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api.js";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ForgotPassword.css";
@@ -97,7 +98,7 @@ const handleSubmit = async (event) => {
 
   try {
     const response = await fetch(
-      "http://localhost:5000/api/auth/reset-password",
+      `${API_BASE_URL}/auth/reset-password`,
       {
         method: "POST",
         headers: {

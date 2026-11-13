@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api.js";
 import {
   createContext,
   useContext,
@@ -10,8 +11,7 @@ import { menuItems as fallbackMenuItems } from "../data/menu";
 const MenuContext = createContext(null);
 
 const MENU_STORAGE_KEY = "chophub-menu-items";
-const API_URL = "http://localhost:5000/api/menu";
-
+const API_URL = `${API_BASE_URL}/menu`;
 function getInitialMenuItems() {
   try {
     const savedItems = localStorage.getItem(MENU_STORAGE_KEY);

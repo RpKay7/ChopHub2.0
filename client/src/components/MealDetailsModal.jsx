@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api.js";
 
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
@@ -5,8 +6,7 @@ import { useCart } from "./CartContext";
 import { useAuth } from "./AuthContext";
 import "./MealDetailsModal.css";
 
-const API_URL = "http://localhost:5000/api";
-
+const API_URL = API_BASE_URL;
 function MealDetailsModal({ item, onClose }) {
   const { addToCart } = useCart();
   const { session } = useAuth();

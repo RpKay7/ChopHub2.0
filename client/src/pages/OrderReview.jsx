@@ -1,11 +1,11 @@
+import API_BASE_URL from "../config/api.js";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../components/AuthContext";
 import "./OrderReview.css";
 
-const API_URL = "http://localhost:5000/api";
-
+const API_URL = API_BASE_URL;
 function formatPrice(price) {
   return `₦${Number(price || 0).toLocaleString("en-NG")}`;
 }

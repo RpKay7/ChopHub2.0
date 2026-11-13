@@ -1,11 +1,11 @@
+import API_BASE_URL from "../config/api.js";
 
 import { useCallback, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import "./OrderTracking.css";
 
-const API_URL = "http://localhost:5000/api";
-
+const API_URL = API_BASE_URL;
 // Fictional ChopHub location for this portfolio project.
 const CHOPHUB_LOCATION = "Allen Avenue, Ikeja, Lagos, Nigeria";
 

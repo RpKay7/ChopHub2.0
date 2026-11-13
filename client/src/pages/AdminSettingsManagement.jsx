@@ -1,9 +1,9 @@
+import API_BASE_URL from "../config/api.js";
 
 import { useEffect, useState } from "react";
 import "./AdminSettingsManagement.css";
 
-const API_URL = "http://localhost:5000/api";
-
+const API_URL = API_BASE_URL;
 const initialHours = [
   { day: "Monday", open: "09:00", close: "21:00", closed: false },
   { day: "Tuesday", open: "09:00", close: "21:00", closed: false },
