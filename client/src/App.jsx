@@ -21,6 +21,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import Intro from "./components/Intro";
+import { RegistrationDraftProvider } from "./components/RegistrationDraftContext";
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);
@@ -34,6 +35,7 @@ function App() {
   }, []);
 
   return (
+  <RegistrationDraftProvider>
     <>
       {showIntro && <Intro />}
 
@@ -66,7 +68,8 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
-  );
+  </RegistrationDraftProvider>
+);
 }
 
 export default App;

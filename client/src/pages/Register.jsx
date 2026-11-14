@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
+import { useRegistrationDraft } from "../components/RegistrationDraftContext";
 import "./Register.css";
 
 function ChopHubLogo() {
@@ -50,11 +51,24 @@ function Register() {
   const navigate = useNavigate();
   const { register } = useAuth();
 
+  const { draft, setDraft, resetDraft } = useRegistrationDraft();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const updateDraft = (field) => (event) => {
+    const value =
+      field === "acceptedTerms"
+        ? event.target.checked
+        : event.target.value;
+
+    setDraft((previous) => ({
+      ...previous,
+      [field]: value,
+    }));
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -62,21 +76,26 @@ function Register() {
 
     if (isSubmitting) return;
 
-    const formData = new FormData(event.currentTarget);
-
-    const fullName = formData.get("fullName");
-    const email = formData.get("email");
-    const phone = formData.get("phone");
-    const password = formData.get("password");
-    const confirmPassword = formData.get("confirmPassword");
+    const {
+      fullName,
+      email,
+      phone,
+      password,
+      confirmPassword,
+      acceptedTerms,
+    } = draft;
 
     if (password !== confirmPassword) {
-      setFeedback("Your passwords do not match. Please check and try again.");
+      setFeedback(
+        "Your passwords do not match. Please check and try again."
+      );
       return;
     }
 
     if (!acceptedTerms) {
-      setFeedback("Please accept the Terms and Conditions to continue.");
+      setFeedback(
+        "Please accept the Terms and Conditions to continue."
+      );
       return;
     }
 
@@ -84,9 +103,9 @@ function Register() {
 
     try {
       const result = await register({
-        fullName,
-        email,
-        phone,
+        fullName: fullName.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
         password,
       });
 
@@ -95,13 +114,15 @@ function Register() {
         return;
       }
 
-     navigate(
-  `/verify-email?email=${encodeURIComponent(
-    result.email || email.trim().toLowerCase()
-  )}`,
-  { replace: true }
-);
-return;
+      const verificationEmail =
+        result.email || email.trim().toLowerCase();
+
+      resetDraft();
+
+      navigate(
+        `/verify-email?email=${encodeURIComponent(verificationEmail)}`,
+        { replace: true }
+      );
     } catch (error) {
       console.error("Registration submission error:", error);
 
@@ -171,7 +192,10 @@ return;
               </p>
             </div>
 
-            <form className="auth-form register-form" onSubmit={handleSubmit}>
+            <form
+              className="auth-form register-form"
+              onSubmit={handleSubmit}
+            >
               <div className="auth-field">
                 <label htmlFor="register-name">Full name</label>
 
@@ -183,6 +207,8 @@ return;
                   autoComplete="name"
                   minLength={2}
                   required
+                  value={draft.fullName}
+                  onChange={updateDraft("fullName")}
                 />
               </div>
 
@@ -196,6 +222,8 @@ return;
                   placeholder="you@example.com"
                   autoComplete="email"
                   required
+                  value={draft.email}
+                  onChange={updateDraft("email")}
                 />
               </div>
 
@@ -211,6 +239,8 @@ return;
                   minLength={7}
                   maxLength={20}
                   required
+                  value={draft.phone}
+                  onChange={updateDraft("phone")}
                 />
               </div>
 
@@ -226,13 +256,19 @@ return;
                     autoComplete="new-password"
                     minLength={8}
                     required
+                    value={draft.password}
+                    onChange={updateDraft("password")}
                   />
 
                   <button
                     type="button"
                     className="auth-password-toggle"
-                    onClick={() => setShowPassword((previous) => !previous)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    onClick={() =>
+                      setShowPassword((previous) => !previous)
+                    }
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showPassword ? (
                       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -294,6 +330,8 @@ return;
                     autoComplete="new-password"
                     minLength={8}
                     required
+                    value={draft.confirmPassword}
+                    onChange={updateDraft("confirmPassword")}
                   />
 
                   <button
@@ -351,15 +389,18 @@ return;
               <label className="auth-remember register-terms">
                 <input
                   type="checkbox"
-                  checked={acceptedTerms}
-                  onChange={(event) => setAcceptedTerms(event.target.checked)}
+                  checked={draft.acceptedTerms}
+                  onChange={updateDraft("acceptedTerms")}
                 />
 
                 <span className="auth-custom-checkbox" />
 
                 <span>
                   I agree to the{" "}
-                  <Link to="/terms" onClick={(event) => event.stopPropagation()}>
+                  <Link
+                    to="/terms"
+                    onClick={(event) => event.stopPropagation()}
+                  >
                     Terms and Conditions
                   </Link>
                   {" "}and{" "}
