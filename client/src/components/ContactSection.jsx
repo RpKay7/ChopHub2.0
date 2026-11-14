@@ -1,3 +1,4 @@
+
 import API_BASE_URL from "../config/api.js";
 
 import { useState } from 'react';
@@ -194,17 +195,7 @@ function ContactSection() {
                 className="contact-call-button"
                 aria-label="Call ChopHub"
               >
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path
-                    d="M5.2 3.5h3.2l1.6 4.1-2 1.6a15.1 15.1 0 0 0 6.8 6.8l1.6-2 4.1 1.6v3.2a1.7 1.7 0 0 1-1.8 1.7C10 20 4 14 3.5 5.3A1.7 1.7 0 0 1 5.2 3.5Z"
-                    stroke="currentColor"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
                 <span>Call Us</span>
-                <span className="contact-action-arrow">↗</span>
               </a>
 
               <a
@@ -216,21 +207,7 @@ function ContactSection() {
                 rel="noopener noreferrer"
                 aria-label="Chat with ChopHub on WhatsApp"
               >
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path
-                    d="M20 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-4.2A8.5 8.5 0 1 1 20 11.5Z"
-                    stroke="currentColor"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M9 8.5c.3-.5.6-.5.9-.5h.4c.2 0 .4.1.5.4l.8 1.8c.1.2.1.4-.1.6l-.6.7c-.2.2-.2.4-.1.6.5.9 1.2 1.6 2.1 2.1.2.1.4.1.6-.1l.7-.6c.2-.2.4-.2.6-.1l1.8.8c.3.1.4.3.4.5v.4c0 .3 0 .6-.5.9-.5.3-1.3.5-2.2.2-1-.3-2.2-.9-3.4-2.1-1.2-1.2-1.8-2.4-2.1-3.4-.3-.9-.1-1.7.2-2.2Z"
-                    fill="currentColor"
-                  />
-                </svg>
                 <span>WhatsApp</span>
-                <span className="contact-action-arrow">↗</span>
               </a>
 
             </div>
@@ -254,7 +231,6 @@ function ContactSection() {
 
             {submitted && (
               <div className="contact-success" role="status">
-                <span className="contact-success-icon">✓</span>
                 <div>
                   <strong>Message received!</strong>
                   <p>
@@ -358,9 +334,6 @@ function ContactSection() {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? 'Sending...' : 'Send Your Message'}
-                {!isSubmitting && (
-                  <span aria-hidden="true">↗</span>
-                )}
               </button>
 
               <p className="contact-form-note">

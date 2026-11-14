@@ -220,7 +220,7 @@ function Navbar() {
             className="mobile-order-link"
             onClick={closeMenu}
           >
-            Order a Meal <span aria-hidden="true">↗</span>
+            Order a Meal
           </a>
         </nav>
 

@@ -119,7 +119,7 @@
 
 .signature-card-top {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -128,25 +128,6 @@
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 2px;
-}
-
-.signature-card-arrow {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 50%;
-  color: white;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-.signature-card:hover .signature-card-arrow {
-  transform: rotate(45deg);
-  border-color: var(--color-gold);
-  background: var(--color-gold);
-  color: var(--color-background);
 }
 
 .signature-card-bottom {
@@ -320,7 +301,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .signature-card-image,
-  .signature-card-arrow,
   .signature-card-line {
     transition: none;
   }

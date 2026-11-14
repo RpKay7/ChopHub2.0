@@ -34,7 +34,6 @@ function DiningEnquiries() {
           <div className="dining-enquiries-actions">
             <a href="#contact" className="dining-enquiries-primary">
               Make an Enquiry
-              <span aria-hidden="true">↗</span>
             </a>
 
             <a href="#menu" className="dining-enquiries-secondary">

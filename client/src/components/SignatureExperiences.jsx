@@ -118,10 +118,6 @@ function SignatureExperiences() {
                   <span className="signature-card-number">
                     {item.number}
                   </span>
-
-                  <span className="signature-card-arrow" aria-hidden="true">
-                    ↗
-                  </span>
                 </div>
 
                 <div className="signature-card-bottom">

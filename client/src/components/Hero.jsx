@@ -48,8 +48,6 @@ const heroSlides = [
 function Hero() {
   const [activeSlide, setActiveSlide] = useState(0);
 
-  // Automatic carousel: changes slides every 6.5 seconds.
-  // It does not pause when the visitor hovers or focuses on the hero.
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveSlide((current) => (current + 1) % heroSlides.length);
@@ -80,7 +78,6 @@ function Hero() {
       id="home"
       aria-label="ChopHub restaurant introduction"
     >
-      {/* Background image carousel */}
       <div className="hero-slides">
         {heroSlides.map((slide, index) => (
           <div
@@ -100,10 +97,8 @@ function Hero() {
         ))}
       </div>
 
-      {/* Cinematic image overlay */}
       <div className="hero-overlay"></div>
 
-      {/* Main hero content */}
       <div className="hero-container">
         <div className="hero-content" key={activeSlide}>
           <div className="hero-eyebrow">
@@ -124,23 +119,19 @@ function Hero() {
           <div className="hero-actions">
             <a href="#menu" className="hero-primary-btn">
               Explore Our Menu
-              <span aria-hidden="true">↗</span>
             </a>
 
             <a href="#about" className="hero-secondary-link">
               Discover Our Story
-              <span aria-hidden="true">→</span>
             </a>
           </div>
 
           <div className="hero-note">
-            <span className="hero-note-icon">✦</span>
             <span>GOOD FOOD. GOOD COMPANY. GREAT MEMORIES.</span>
           </div>
         </div>
       </div>
 
-      {/* Bottom caption and carousel controls */}
       <div className="hero-bottom">
         <div className="hero-image-caption">
           <span className="caption-line"></span>
@@ -183,7 +174,6 @@ function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
       <div className="hero-scroll-indicator">
         <span>SCROLL TO EXPLORE</span>
         <span className="scroll-line"></span>

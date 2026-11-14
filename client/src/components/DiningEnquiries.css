@@ -125,7 +125,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 25px;
   background: var(--color-gold);
   color: var(--color-primary-dark);
   font-size: 11px;
@@ -140,15 +139,6 @@
 .dining-enquiries-primary:hover {
   background: var(--color-gold-light);
   transform: translateY(-3px);
-}
-
-.dining-enquiries-primary span {
-  font-size: 17px;
-  transition: transform 0.3s ease;
-}
-
-.dining-enquiries-primary:hover span {
-  transform: translate(3px, -3px);
 }
 
 .dining-enquiries-secondary {
@@ -199,9 +189,7 @@
   color: var(--color-gold);
 }
 
-/* =========================================
-   RESPONSIVE DESIGN
-========================================= */
+/* RESPONSIVE DESIGN */
 
 @media (max-width: 768px) {
   .dining-enquiries-section {
@@ -288,7 +276,6 @@
 @media (prefers-reduced-motion: reduce) {
   .dining-enquiries-image img,
   .dining-enquiries-primary,
-  .dining-enquiries-primary span,
   .dining-enquiries-secondary,
   .dining-enquiries-secondary span {
     transition: none;

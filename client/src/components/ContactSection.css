@@ -187,7 +187,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
   text-decoration: none;
   font-family: var(--font-body);
   font-size: 11px;
@@ -195,7 +194,8 @@
   transition:
     transform 0.3s ease,
     background 0.3s ease,
-    border-color 0.3s ease;
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .contact-call-button {
@@ -221,24 +221,6 @@
   border-color: #399B69;
   color: #8CD5A9;
   transform: translateY(-3px);
-}
-
-.contact-call-button svg,
-.contact-whatsapp-button svg {
-  width: 17px;
-  height: 17px;
-  flex-shrink: 0;
-}
-
-.contact-action-arrow {
-  margin-left: auto;
-  font-size: 15px;
-  transition: transform 0.3s ease;
-}
-
-.contact-call-button:hover .contact-action-arrow,
-.contact-whatsapp-button:hover .contact-action-arrow {
-  transform: translate(2px, -2px);
 }
 
 /* BRAND SIGNATURE */
@@ -385,7 +367,7 @@
   padding: 0 22px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   border: none;
   background: var(--color-gold);
   color: var(--color-primary-dark);
@@ -399,13 +381,14 @@
     transform 0.3s ease;
 }
 
-.contact-submit-button:hover {
+.contact-submit-button:hover:not(:disabled) {
   background: var(--color-gold-light);
   transform: translateY(-2px);
 }
 
-.contact-submit-button span {
-  font-size: 18px;
+.contact-submit-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .contact-form-note {
@@ -417,25 +400,10 @@
 /* SUCCESS FEEDBACK */
 
 .contact-success {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
   margin-bottom: 25px;
   padding: 17px;
   border: 1px solid rgba(116, 175, 133, 0.35);
   background: rgba(116, 175, 133, 0.08);
-}
-
-.contact-success-icon {
-  width: 25px;
-  height: 25px;
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: rgba(116, 175, 133, 0.2);
-  color: #9bd5a9;
-  font-size: 14px;
 }
 
 .contact-success strong {
@@ -446,6 +414,18 @@
 .contact-success p {
   margin-top: 5px;
   color: var(--color-muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* ERROR FEEDBACK */
+
+.contact-error {
+  margin-bottom: 25px;
+  padding: 15px;
+  border: 1px solid rgba(184, 92, 69, 0.4);
+  background: rgba(184, 92, 69, 0.08);
+  color: var(--color-cream);
   font-size: 11px;
   line-height: 1.7;
 }
@@ -548,19 +528,9 @@
 
   .contact-call-button,
   .contact-whatsapp-button {
-    padding: 0 9px;
-    gap: 6px;
+    min-height: 49px;
+    padding: 0 8px;
     font-size: 10px;
-  }
-
-  .contact-call-button svg,
-  .contact-whatsapp-button svg {
-    width: 15px;
-    height: 15px;
-  }
-
-  .contact-action-arrow {
-    font-size: 13px;
   }
 }
 
@@ -570,8 +540,7 @@
   .contact-field textarea,
   .contact-submit-button,
   .contact-call-button,
-  .contact-whatsapp-button,
-  .contact-action-arrow {
+  .contact-whatsapp-button {
     transition: none;
   }
 }

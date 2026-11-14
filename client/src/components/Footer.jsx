@@ -63,7 +63,6 @@ function Footer() {
 
   return (
     <footer className="site-footer">
-
       {/* MAIN FOOTER */}
       <div className="footer-main">
         <div className="footer-container">
@@ -127,7 +126,6 @@ function Footer() {
             </p>
 
             <a href="tel:07068414697" className="footer-contact-link">
-              <span className="footer-contact-icon">↗</span>
               Call Us
             </a>
 
@@ -137,12 +135,10 @@ function Footer() {
               rel="noopener noreferrer"
               className="footer-contact-link"
             >
-              <span className="footer-contact-icon">↗</span>
               WhatsApp
             </a>
 
             <a href="#contact" className="footer-contact-link">
-              <span className="footer-contact-icon">↗</span>
               Send an Enquiry
             </a>
           </div>
@@ -166,7 +162,6 @@ function Footer() {
           <div className="footer-newsletter-form-area">
             {subscribed ? (
               <div className="footer-newsletter-success" role="status">
-                <span>✓</span>
                 <p>
                   Thank you for your interest! Newsletter sign-up
                   is currently a demo feature.
@@ -191,9 +186,8 @@ function Footer() {
                     required
                   />
 
-                  <button type="submit" aria-label="Subscribe to newsletter">
+                  <button type="submit">
                     Subscribe
-                    <span>↗</span>
                   </button>
                 </div>
 
@@ -225,12 +219,10 @@ function Footer() {
             onClick={scrollToTop}
           >
             Back to top
-            <span>↑</span>
           </button>
 
         </div>
       </div>
-
     </footer>
   );
 }
