@@ -7,21 +7,18 @@ const experiences = [
     title: 'Rooted in Nigerian Flavours',
     description:
       'From familiar Nigerian classics to exciting favourites, our menu celebrates the flavours we love.',
-    symbol: '✳',
   },
   {
     number: '02',
     title: 'Made for Sharing',
     description:
       'Good food has a way of bringing people together. There is always room for one more at the table.',
-    symbol: '✦',
   },
   {
     number: '03',
     title: 'Every Bite Matters',
     description:
       'We believe the little details matter — from the way a meal is presented to the experience of enjoying it.',
-    symbol: '❋',
   },
 ];
 
@@ -46,8 +43,6 @@ function ExperienceSection() {
           </div>
 
           <div className="experience-description">
-            <span className="experience-description-mark">“</span>
-
             <p className="experience-lead">
               It is the conversations around the table, the flavours
               that take you home, and the moments that stay with you.
@@ -76,10 +71,6 @@ function ExperienceSection() {
               <div className="experience-card-top">
                 <span className="experience-number">
                   {item.number}
-                </span>
-
-                <span className="experience-symbol" aria-hidden="true">
-                  {item.symbol}
                 </span>
               </div>
 

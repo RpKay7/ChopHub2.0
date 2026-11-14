@@ -72,15 +72,6 @@
   border-left: 1px solid var(--color-border);
 }
 
-.experience-description-mark {
-  display: block;
-  height: 37px;
-  color: var(--color-terracotta);
-  font-family: var(--font-heading);
-  font-size: 58px;
-  line-height: 1;
-}
-
 .experience-description p {
   margin-bottom: 17px;
   color: var(--color-muted);
@@ -105,9 +96,7 @@
   color: var(--color-gold-light);
   font-size: 12px;
   font-weight: 600;
-  transition:
-    gap 0.3s ease,
-    color 0.3s ease;
+  transition: gap 0.3s ease, color 0.3s ease;
 }
 
 .experience-link:hover {
@@ -161,8 +150,8 @@
 
 .experience-card-top {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: flex-start;
   margin-bottom: 37px;
 }
 
@@ -171,25 +160,6 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 2px;
-}
-
-.experience-symbol {
-  display: grid;
-  width: 43px;
-  height: 43px;
-  place-items: center;
-  border: 1px solid rgba(200, 166, 106, 0.25);
-  border-radius: 50%;
-  color: var(--color-gold);
-  font-size: 21px;
-  transition:
-    background 0.3s ease,
-    transform 0.3s ease;
-}
-
-.experience-card:hover .experience-symbol {
-  transform: rotate(25deg);
-  background: rgba(200, 166, 106, 0.1);
 }
 
 .experience-card h3 {
@@ -246,6 +216,7 @@
   height: 1px;
   background: var(--color-border);
 }
+
 /* =========================================
    TABLET
 ========================================= */
@@ -384,9 +355,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .experience-card,
-  .experience-symbol,
   .experience-card-line,
   .experience-link {
     transition: none;
+  }
+
+  .experience-card:hover {
+    transform: none;
   }
 }
