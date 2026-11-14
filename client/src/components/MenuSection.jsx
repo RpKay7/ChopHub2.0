@@ -1,9 +1,48 @@
-
 import { useMemo, useState } from "react";
 import { menuCategories } from "../data/menu";
 import { useMenu } from "./MenuContext";
 import MealDetailsModal from "./MealDetailsModal";
 import "./MenuSection.css";
+
+function MenuCardImage({ item, priority = false }) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(!item.image);
+
+  return (
+    <div
+      className={`menu-card-image ${
+        imageLoaded ? "image-loaded" : "image-loading"
+      } ${imageFailed ? "image-missing" : ""}`}
+    >
+      {!imageFailed && item.image && (
+        <img
+          src={item.image}
+          alt={item.name}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          decoding="async"
+          onLoad={() => setImageLoaded(true)}
+          onError={() => {
+            setImageFailed(true);
+            setImageLoaded(false);
+          }}
+        />
+      )}
+
+      {item.popular && (
+        <span className="menu-card-badge">★ Popular</span>
+      )}
+
+      {item.availability !== "available" && (
+        <span className="menu-unavailable-badge">
+          {item.availability === "sold-out"
+            ? "Sold out"
+            : "Temporarily unavailable"}
+        </span>
+      )}
+    </div>
+  );
+}
 
 function MenuSection() {
   const { items: menuItems } = useMenu();
@@ -23,8 +62,8 @@ function MenuSection() {
 
       const matchesSearch =
         item.name.toLowerCase().includes(search) ||
-        item.description.toLowerCase().includes(search) ||
-        item.category.toLowerCase().includes(search);
+        (item.description || "").toLowerCase().includes(search) ||
+        (item.category || "").toLowerCase().includes(search);
 
       const matchesPopular = !showPopular || item.popular;
 
@@ -37,7 +76,7 @@ function MenuSection() {
   }, [menuItems, activeCategory, searchTerm, showPopular]);
 
   const formatPrice = (price) =>
-    `₦${price.toLocaleString("en-NG")}`;
+    `₦${Number(price).toLocaleString("en-NG")}`;
 
   const openMealDetails = (item) => {
     setSelectedMeal(item);
@@ -46,7 +85,6 @@ function MenuSection() {
   return (
     <section className="menu-section section" id="menu">
       <div className="container">
-
         <div className="menu-heading">
           <div className="section-heading">
             <span className="section-eyebrow">
@@ -75,7 +113,6 @@ function MenuSection() {
         </div>
 
         <div className="menu-toolbar">
-
           <div className="menu-search">
             <svg
               viewBox="0 0 24 24"
@@ -170,7 +207,7 @@ function MenuSection() {
 
         {filteredItems.length > 0 ? (
           <div className="menu-grid">
-            {filteredItems.map((item) => (
+            {filteredItems.map((item, index) => (
               <article
                 className="menu-card menu-card-clickable"
                 key={item.id}
@@ -188,34 +225,11 @@ function MenuSection() {
                 tabIndex={0}
                 aria-label={`View details for ${item.name}`}
               >
-                <div className="menu-card-image">
-
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    loading="lazy"
-                    onError={(event) => {
-                      event.currentTarget.style.display = "none";
-                      event.currentTarget.parentElement.classList.add(
-                        "image-missing"
-                      );
-                    }}
-                  />
-
-                  {item.popular && (
-                    <span className="menu-card-badge">
-                      ★ Popular
-                    </span>
-                  )}
-
-                  {item.availability !== "available" && (
-                    <span className="menu-unavailable-badge">
-                      {item.availability === "sold-out"
-                        ? "Sold out"
-                        : "Temporarily unavailable"}
-                    </span>
-                  )}
-                </div>
+                <MenuCardImage
+                  key={`${item.id}-${item.image || "no-image"}`}
+                  item={item}
+                  priority={index === 0}
+                />
 
                 <div className="menu-card-content">
                   <span className="menu-card-category">
@@ -270,7 +284,6 @@ function MenuSection() {
             A little something for every appetite.
           </p>
         </div>
-
       </div>
 
       {selectedMeal && (

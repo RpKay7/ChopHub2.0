@@ -231,3 +231,25 @@ select:focus-visible {
     animation-duration: 0.01ms !important;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+  overscroll-behavior-y: contain;
+}
+
+body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  * {
+    scroll-behavior: auto;
+  }
+}
